@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  springboot-app:
+    build: .
+    image: azizjbebli/5ia_jbebli_aziz:1.0
+    restart: always
+    ports:
+      - 8082:8080
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0
+    volumes:
+      - /home/Kaddem/DevopsProject/db:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: khaddemApp
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
